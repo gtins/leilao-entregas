@@ -17,22 +17,40 @@ def ler_entregas(arquivo):
     with open(arquivo, 'r') as f:
         for linha in f:
             horario, destino, bonus = linha.strip().split(',')
+            #le o arquivo que abriu e coloca em cada variavel
             entregas.append((int(horario), destino, int(bonus)))
+            # coloca tudo dentro da lista vazia e transforma em inteiro
     return entregas
 
 def leilao_basico(conexoes, entregas):
+    #precisa das duas funções anteriores para poder funcionar
     lucro_total = 0
+    #lucro zeroi pois acabou de começar 
     sequencia_entregas = []
+    #lista vazia no inicio do código
     tempo_atual = 0
+    #considera como um ponto de partida
     posicao_atual = 'A'
     
     for entrega in entregas:
+        #cada indice das entregas retornadas pela função anterior
         horario, destino, bonus = entrega
+        #primeira iteração, horario é 0, destino é B e o bonus é 1
+        #segundo a iteração, horario é 5, destino é c e o bonus é 10
+        #cada variavel recebe o valor da tupla
         if destino in conexoes[posicao_atual]:
+            #se o destino estiver na lista de conexões, na primeira iteração será A
             tempo_viagem = conexoes[posicao_atual][destino]
+            #variavel tempo de viagem, declarada aqui pela primeira vez
+            #irá receber o valor do dicionário de conexões, onde o primeiro valor é o ponto de partida e o segundo o destino
+            #tempo de viagem é o tempo que leva para ir de A a B, por exemplo
             if tempo_atual + tempo_viagem <= horario:
+                #se o tempo atual, mais o tempo de viagem,
+                # for menor que o horário, contido no arquivo de entregas:
                 lucro_total += bonus
+                #lucro total até então zerado recebe o bonus do arquivo de entregas de forma dinamica
                 sequencia_entregas.append((horario, destino, bonus))
+                #a lista de entregas recebe a entrega recém feita
                 tempo_atual += tempo_viagem * 2  # Ida e volta
                 posicao_atual = 'A'  # Retorna ao ponto de partida
     
